@@ -6,6 +6,11 @@ const locators = {
   signInButton: "input#signInBtn",
   errorMsg: "[style*='block']",
   allItemsHeading: ".card-title a",
+  dropdown: "select.form-control",
+  radioOption: "span.checkmark",
+  okayPopUp: "#okayBtn",
+  termsCheckbox: "#terms",
+  blinkingText: ".blinkingText",
 };
 
 test("First Playwright Test", async ({ browser }) => {
@@ -39,4 +44,25 @@ test("Page Playwright test", async ({ browser, page }) => {
   console.log(allTitle);
 });
 
+test("UI Dropdown", async ({ page }) => {
+  await page.goto("https://rahulshettyacademy.com/loginpagePractise/");
+  await page.locator(locators.username).fill("rahulshettyacademy");
+  await page.locator(locators.password).fill("learning");
+  await page.locator(locators.dropdown).selectOption("consult");
+  // await page.locator(locators.signInButton).click();
+  await page.locator(locators.radioOption).nth(1).click();
+  await expect(page.locator(locators.radioOption).nth(1)).toBeChecked();
+  await page.locator(locators.okayPopUp).click();
+  await page.locator(locators.termsCheckbox).click();
+  await expect(page.locator(locators.termsCheckbox)).toBeChecked();
+  await page.locator(locators.termsCheckbox).uncheck();
+  //assertion
+  await expect(
+    await page.locator(locators.termsCheckbox).isChecked()
+  ).toBeFalsy();
 
+  await expect(page.locator(locators.blinkingText).first()).toContainText(
+    "Free Access to InterviewQues/ResumeAssistance/Material"
+  );
+  // await page.pause();
+});
